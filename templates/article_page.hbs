@@ -109,7 +109,7 @@
           </div>
 
           <!-- Article Tags -->
-          {{#if (compare article.content_tags.length ">" 0)}}
+          {{#if article.content_tags.length}}
             <div class="article-tags">
               <span class="tags-label">{{t 'content_tags_label'}}</span>
               <ul class="tags-list">
@@ -261,16 +261,16 @@
                               {{author.name}}
                             {{/link}}
                             
-                            <!-- Author Badges -->
-                            {{#if (filter author.badges on="category_slug" equals="titles")}}
-                              <ul class="author-badges">
-                                {{#each (filter author.badges on="category_slug" equals="titles")}}
+                            <!-- Title Badges - Without using filter helper -->
+                            <ul class="author-badges">
+                              {{#each author.badges}}
+                                {{#is category_slug "titles"}}
                                   <li class="badge-title" title="{{description}}">
                                     {{name}}
                                   </li>
-                                {{/each}}
-                              </ul>
-                            {{/if}}
+                                {{/is}}
+                              {{/each}}
+                            </ul>
                           </div>
                           
                           <!-- Comment Date -->
@@ -283,24 +283,16 @@
                           </div>
                         </div>
                         
-                        <!-- Achievement Badges -->
-                        {{#if (filter author.badges on="category_slug" equals="achievements")}}
-                          <ul class="achievement-badges">
-                            {{#each (slice (filter author.badges on="category_slug" equals="achievements") 0 4)}}
+                        <!-- Achievement Badges - Without using filter helper -->
+                        <ul class="achievement-badges">
+                          {{#each author.badges}}
+                            {{#is category_slug "achievements"}}
                               <li class="achievement-badge">
                                 <img src="{{icon_url}}" alt="{{name}}" title="{{name}} | {{description}}" />
                               </li>
-                            {{/each}}
-                            
-                            {{#if (compare (calc author.badges.length "-" 4) ">" 0)}}
-                              <li class="more-achievements">
-                                <a href="{{page_path "user_profile" id=author.id filter_by="badges"}}" aria-label="{{t 'more_awards_to' count=(calc author.badges.length "-" 4) name=author.name}}">
-                                  +{{calc author.badges.length "-" 4}}
-                                </a>
-                              </li>
-                            {{/if}}
-                          </ul>
-                        {{/if}}
+                            {{/is}}
+                          {{/each}}
+                        </ul>
                       </div>
                       
                       <!-- Comment Labels -->
